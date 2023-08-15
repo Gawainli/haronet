@@ -19,7 +19,18 @@ public class EchoClient
         while (true)
         {
             // Send message.
-            var message = "Hi friends 👋!<|EOM|>";
+            // var message = "Hi friends 👋!<|EOM|>";
+            var message = Console.ReadLine();
+            if (string.IsNullOrEmpty(message) || message == "@exit")
+            {
+                Console.WriteLine("Exit!");
+                client.Shutdown(SocketShutdown.Both);
+                client.Close();
+                return;
+            }
+            
+            var eom = "<|EOM|>";
+            message += eom;
             var messageBytes = Encoding.UTF8.GetBytes(message);
             _ = await client.SendAsync(messageBytes, SocketFlags.None);
             Console.WriteLine($"Socket client sent message: \"{message}\"");
@@ -32,13 +43,11 @@ public class EchoClient
             {
                 Console.WriteLine(
                     $"Socket client received acknowledgment: \"{response}\"");
-                break;
+                // break;
             }
             // Sample output:
             //     Socket client sent message: "Hi friends 👋!<|EOM|>"
             //     Socket client received acknowledgment: "<|ACK|>"
         }
-
-        client.Shutdown(SocketShutdown.Both);
     }
 }
