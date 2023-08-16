@@ -6,35 +6,65 @@ namespace haronet.ProtobufServer;
 
 public class ProtobufServer
 {
-    private static readonly List<TcpClient> Clients = new List<TcpClient>();
-    
-    public static Task Run()
+    private static readonly List<TcpChannel> Channels = new List<TcpChannel>();
+
+    public static async Task Run()
     {
-        foreach (var c in Clients)
+        Console.WriteLine("Run Protobuf Server!");
+        var ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11223);
+
+        var listener = new Socket(
+            ipEndPoint.AddressFamily,
+            SocketType.Stream,
+            ProtocolType.Tcp);
+        listener.Bind(ipEndPoint);
+        listener.Listen(100);
+
+        while (true)
         {
-            c.Update();
+            var handler = await listener.AcceptAsync();
+            Console.WriteLine($"Socket server accepted client: {handler.RemoteEndPoint}");
+            try
+            {
+                var channel = CreateChannel(new DefaultPkgDecoder(), new DefaultPkgEncoder(), handler);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+            Update();
         }
     }
-    
-    public static TcpClient CreateClient(INetPackageEncoder encoder, INetPackageDecoder decoder)
+
+    public static TcpChannel CreateChannel(INetPackageDecoder decoder, INetPackageEncoder encoder, Socket socket)
     {
-        var client = new TcpClient(encoder, decoder);
-        Clients.Add(client);
-        return client;
+        var cl = new TcpChannel(decoder, encoder, socket);
+        Channels.Add(cl);
+        return cl;
     }
-    
-    public static void DestroyClient(TcpClient client)
+
+    public static void RemoveChannel(TcpChannel cl)
     {
-        client.Dispose();
-        Clients.Remove(client);
+        cl.Dispose();
+        Channels.Remove(cl);
     }
-    
-    public static async Task Update()
+
+    public static async void Update()
     {
-        await Task.Delay(33);
-        foreach (var c in Clients)
+        while (true)
         {
-            c.Update();
+            await Task.Delay(1000/60);
+            foreach (var c in Channels)
+            {
+                c.Update();
+                if (c.RecvPkg() is DefaultNetPackage pkg)
+                {
+                    Console.WriteLine($"RecvPkg: {pkg.MsgId}");
+                    var str = System.Text.Encoding.UTF8.GetString(pkg.BodyBytes);
+                    Console.WriteLine($"RecvPkg msg: {str}");
+                }
+            }
         }
     }
 }
