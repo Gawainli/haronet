@@ -44,7 +44,7 @@ public class TcpChannel : IDisposable
     }
     
     
-    public INetPackage RecvPkg()
+    public INetPackage? RecvPkg()
     {
         if (recvQueue.Count == 0)
         {

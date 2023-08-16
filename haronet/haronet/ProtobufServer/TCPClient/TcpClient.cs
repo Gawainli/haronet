@@ -4,7 +4,7 @@ namespace haronet.ProtobufServer;
 
 public class TcpClient : IDisposable
 {
-    private TcpChannel channel;
+    private TcpChannel channel = null;
     private readonly INetPackageEncoder encoder;
     private readonly INetPackageDecoder decoder;
 
@@ -31,6 +31,10 @@ public class TcpClient : IDisposable
     
     public bool Connected()
     {
+        if (channel is null)
+        {
+            return false;
+        }
         return channel.IsConnected;
     }
     
@@ -43,11 +47,11 @@ public class TcpClient : IDisposable
     
     public void Update()
     {
-        channel.Update();
+        channel?.Update();
     }
 
     public void Dispose()
     {
-        channel.Dispose();
+        channel?.Dispose();
     }
 }

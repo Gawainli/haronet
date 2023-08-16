@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "haronet", "haronet\haronet.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "haroclient", "haroclient\haroclient.csproj", "{F10A2694-070A-4C10-B0DD-2424EBA1904F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{4BA81A4D-C667-48EB-8905-7800125D1D3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F10A2694-070A-4C10-B0DD-2424EBA1904F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F10A2694-070A-4C10-B0DD-2424EBA1904F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F10A2694-070A-4C10-B0DD-2424EBA1904F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4BA81A4D-C667-48EB-8905-7800125D1D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4BA81A4D-C667-48EB-8905-7800125D1D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4BA81A4D-C667-48EB-8905-7800125D1D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4BA81A4D-C667-48EB-8905-7800125D1D3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
